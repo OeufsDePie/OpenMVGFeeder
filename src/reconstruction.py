@@ -33,7 +33,7 @@ if __name__ == "__main__":
 	
 	if opts.im==None or not(os.path.exists(opts.im)) :
 		parser.error('You must specify a correct image directory, use --help option...')
-	if opts.build==None or not(os.path.exists(opts.build)) :c
+	if opts.build==None or not(os.path.exists(opts.build)) :
 		parser.error('You must specify a correct openMVG build directory, use --help option...')
 	if opts.src==None or not(os.path.exists(opts.src)) :
 		parser.error('You must specify a correct openMVG source directory, use --help option...')
