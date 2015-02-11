@@ -1,3 +1,5 @@
+# Ignore folders
+openMVG_Build/
 # Ignore temporary files
 *.swp
 
