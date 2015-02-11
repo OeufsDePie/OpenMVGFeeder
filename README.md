@@ -51,7 +51,7 @@ cmake -DCMAKE_BUILD_TYPE=RELEASE . ../openMVG/src/
 make -j *NBCORE*
 ```
 
-## Utilisation of reconstruction.py
+## How to use reconstruction.py
 You must specify several directories to run the **python 3** script :
 
 * -i : image directory
