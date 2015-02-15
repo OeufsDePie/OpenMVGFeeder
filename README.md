@@ -15,7 +15,7 @@ Follow the instruction from the *BUILD* file in the openMVG folder. In summary, 
 sudo apt-get install libpng-dev libjpeg-dev libtiff-dev libxxf86vm1 libxxf86vm-dev libxi-dev libxrandr-dev
 ```
 
-Check if all files have been downloaded :
+Check if all files have been downloaded and compile openMVG : 
 
 ```
 cd openMVG
