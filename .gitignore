@@ -1,7 +1,6 @@
 # Ignore some folders and files
 openMVG_Build/
 out/
-cameraGenerated.txt
 # Ignore temporary files
 *.swp
 

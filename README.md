@@ -27,9 +27,11 @@ cd openMVG_Build
 cmake -DCMAKE_BUILD_TYPE=RELEASE . ../openMVG/src/
 make -j NBCORE
 ```
-Now copy cameraGenerated.txt from the openMVG source folder :
+Please follow all the following instructions, otherwise the python script won't work.
+
+Copy cameraGenerated.txt from the openMVG source folder to the openMVG build folder :
 ```
-cp ../openMVG/src/software/SfM/cameraSensorWidth/cameraGenerated.txt .
+cp ../openMVG/src/software/SfM/cameraSensorWidth/cameraGenerated.txt software/SfM/
 ```
 You can now safely delete the openMVG folder since we won't be using it again :
 ```
