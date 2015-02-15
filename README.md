@@ -19,37 +19,23 @@ Check if all files have been downloaded :
 
 ```
 cd openMVG
-```
-
-```
 ls
-```
-
-```
 AUTHORS BUILD  docs  logo  README  src  ...
-```
-
-```
 cd ..
-```
-
-```
 mkdir openMVG_Build
-```
-
-```
 cd openMVG_Build
-```
-
-```
 cmake -DCMAKE_BUILD_TYPE=RELEASE . ../openMVG/src/
-```
-
-```
 make -j NBCORE
 ```
-
-You are now all set to use **openMVG** from the openMVG_Build directory. 
+Now copy cameraGenerated.txt from the openMVG source folder :
+```
+cp ../openMVG/src/software/SfM/cameraSensorWidth/cameraGenerated.txt .
+```
+You can now safely delete the openMVG folder since we won't be using it again :
+```
+rm -r ../openMVG
+```
+You are now all set to use **openMVG** from the **openMVG_Build** directory. 
 
 ## How to use reconstruction.py
 You must specify several directories to run the **python 3** script :
