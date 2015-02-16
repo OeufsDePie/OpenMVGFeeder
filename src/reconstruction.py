@@ -2,9 +2,17 @@
 import subprocess,sys,os
 from optparse import OptionParser
 
+"""
+main function aims at launching the openMVG reconstruction. Only works under Unix based system.
+INPUT: paths to images, openMVG build and out directory where everything will be stored
+OUTPUT : None
+"""
 def main(imDir,method,omvgBuildDir,outDir):
 
-
+	# check if outDir/matches exists, if not, create it.
+	if not(os.path.isdir(outDir+'/matches')) :
+		os.mkdir(outDir+'/matches')
+	# create commands used to lauch the openMVG reconstruction
 	commandCreateList = ['./'+omvgBuildDir+'/software/SfM/openMVG_main_CreateList','-i',imDir,'-d',omvgBuildDir+'/software/SfM/cameraGenerated.txt','-o',outDir+'/matches']
 	if method=='long' :
 		commandComputeMatches = ['./'+omvgBuildDir+'/software/SfM/openMVG_main_computeMatches','-i',imDir,'-o',outDir+'/matches','-g','f','-p','0.01','-r','0.8']
@@ -12,12 +20,13 @@ def main(imDir,method,omvgBuildDir,outDir):
 	else :
 		commandComputeMatches = ['./'+omvgBuildDir+'/software/SfM/openMVG_main_computeMatches','-i',imDir,'-o',outDir+'/matches','-g','e','-p','0.01','-r','0.8','-s','1']
 		commandIncremental = ['./'+omvgBuildDir+'/software/globalSfM/openMVG_main_GlobalSfM','-i',imDir,'-m',outDir+'/matches','-o',outDir,'-c','1']
-
+	# lauch the reconstruction
 	subprocess.call(commandCreateList)
 	subprocess.call(commandComputeMatches)
 	subprocess.call(commandIncremental)
 
 if __name__ == "__main__":
+	# create the parser : allow user to use this python script with arguments
 	parser = OptionParser()
 	parser.add_option('-i', '--imgDir', action='store',dest='im',
 		          type='string',help='image directory', metavar='IMDIR')
@@ -38,8 +47,10 @@ if __name__ == "__main__":
 	if not(opts.method in ('long','short')) :
 		parser.error("Method must be either long or short, use --help option...")	
 	
+	# normalisation of paths specified by user
 	opts.im = os.path.relpath(opts.im)
 	opts.build = os.path.relpath(opts.build)
 	opts.out = os.path.relpath(opts.out)
-
+	
+	# lauch the main function
 	main(opts.im,opts.method,opts.build,opts.out)

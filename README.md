@@ -43,7 +43,6 @@ You are now all set to use **openMVG** from the **openMVG_Build** directory.
 You must specify several directories to run the **python 3** script :
 
 * -i : image directory
-* -s : openMVG source directory
 * -b : openMVG build directory
 * -o : out directory where everything will be stored
 * -m : optional arguement to specify long or short method for the reconstruction
