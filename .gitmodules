@@ -2,6 +2,3 @@
 	path = openMVG
 	url = https://github.com/openMVG/openMVG.git
 	branch = develop
-[submodule "ImageDataset_SceauxCastle"]
-	path = ImageDataset_SceauxCastle
-	url = git@github.com:openMVG/ImageDataset_SceauxCastle.git
