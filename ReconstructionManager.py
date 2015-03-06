@@ -1,4 +1,4 @@
-import subprocess,sys,os
+import subprocess,sys,os,shutil
 from optparse import OptionParser
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot,QFileSystemWatcher
 
@@ -15,6 +15,7 @@ class ReconstructionManager(QObject):
         INPUT: paths to images, openMVG build and out directory where everything will be stored
         OUTPUT : None
         """
+        self.pointCloudDir = pointCloudDir
         # check if outDir/matches exists, if not, create it.
         if not(os.path.isdir(outDir+'/matches')) :
             os.mkdir(outDir+'/matches')
@@ -43,5 +44,6 @@ class ReconstructionManager(QObject):
         # We send the newPointCloud signal only if the added file a .ply
         ext = os.path.splitext(filePath)[-1].lower()
         if (ext=="ply"):
+            shutil.copy(filePath,self.pointCloudDir)
             #Emit the signal
             self.newPointCloud.emit(filePath)
