@@ -9,6 +9,13 @@ class ReconstructionManager(QObject):
 
     def __init__(self):
         QObject.__init__(self)
+        self.listPly = []
+        # Initializattion of the folderwatcher
+        self.watcherPointCloud = QFileSystemWatcher()
+        # Connect the signal to the reconstruction launching method
+        self.watcherPointCloud.directoryChanged.connect(self.pointCloudDetected)
+
+    @pyqtSlot(str, str, str, str, str)
     def launchReconstruction(self,imDir,method,omvgBuildDir,outDir,pointCloudDir):
         """
         launchReconstruction function aims at launching the openMVG reconstruction. Only works under Unix based system.
@@ -27,23 +34,39 @@ class ReconstructionManager(QObject):
         else :
             commandComputeMatches = [omvgBuildDir+'/software/SfM/openMVG_main_computeMatches','-i',imDir,'-o',outDir+'/matches','-g','e','-p','0.01','-r','0.8','-s','1']
             commandIncremental = [omvgBuildDir+'/software/globalSfM/openMVG_main_GlobalSfM','-i',imDir,'-m',outDir+'/matches','-o',outDir,'-c','1']
-        # Initializattion of the folderwatcher
-        watcherPointCloud = QFileSystemWatcher()
-        watcherPointCloud.addPath(outDir)
-        # Connect the signal to the reconstruction launching method
-        watcherPointCloud.directoryChanged.connect(self.pointCloudDetected)
+
+        self.watcherPointCloud.addPath(outDir)
 
         # lauch the reconstruction
         subprocess.call(commandCreateList)
         subprocess.call(commandComputeMatches)
         subprocess.call(commandIncremental)
 
-
-    @pyqtSlot(str)
-    def pointCloudDetected(self,filePath):
+    def pointCloudDetected(self,dirPath):
+        newPLYs = self.newPly(dirPath) 
         # We send the newPointCloud signal only if the added file a .ply
-        ext = os.path.splitext(filePath)[-1].lower()
-        if (ext=="ply"):
-            shutil.copy(filePath,self.pointCloudDir)
-            #Emit the signal
-            self.newPointCloud.emit(filePath)
+        if newPLYs:
+            for ply in newPLYs:
+                # Copy the resulting ply in the pointClouddir and
+                # determine the new path
+                shutil.copy(ply, self.pointCloudDir)
+                path = os.path.join(self.pointCloudDir, os.path.basename(ply))
+                #Emit the signal
+                self.newPointCloud.emit(path)
+
+    def newPly(self, dirPath):
+        """ Return the new PLY files"""
+        newPlyList = os.listdir(dirPath)
+        # Transform file list in path list
+        newPlyList = [os.path.join(dirPath, ply) for ply in newPlyList]
+        # Filter only ply files
+        endInPly = lambda path: os.path.splitext(path)[-1].lower() == ".ply"
+        newPlyList = [ply for ply in newPlyList if endInPly(ply)] 
+        oldPlyList = self.listPly.copy()
+        # update the list
+        self.listPly = newPlyList
+
+        # Is there new files ?
+        newPlyList = list(set(newPlyList).difference(set(oldPlyList)))
+
+        return newPlyList
